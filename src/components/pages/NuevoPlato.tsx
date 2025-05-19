@@ -1,19 +1,30 @@
 import Input_label from "./form_components/Input_label";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import Form_errors from "./form_components/form_errors";
+import Form_errors from "./form_components/Form_errors";
+import { useContext } from "react";
+import FirebaseContext from "../../firebase/context";
+import { collection, addDoc } from "firebase/firestore";
+import type { Producto } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 
 export default function NuevoPlato() {
 
+  const firebase = useContext(FirebaseContext)?.firebase;
+
+  // Redirección
+  const navigate = useNavigate();
+  
   // Validación y leer los datos del formulario
   const formik = useFormik(
     {
       initialValues: {
-        nombre: '',
-        precio: '',
+        name: '',
+        price: '',
         category: '',
         image: '',
-        description: ''
+        description: '',
+        exist: false
       },
       validationSchema: Yup.object({
         nombre: Yup.string().min(3, 'Los platos deben de tener al menos 3 caracteres.').required('El nombre es obligatorio.'),
@@ -21,8 +32,15 @@ export default function NuevoPlato() {
         category: Yup.string().required('La categoria es obligatoria'),
         description: Yup.string().min(1, 'La descripción debe de ser más larga.').required('La descripción es obligatoria'),
       }),
-      onSubmit: datos => {
-        console.log(datos)
+      onSubmit: async (datos: Producto) => {
+        try{
+          await addDoc(collection(firebase!.db, 'productos'), datos)
+          
+          navigate('/')
+
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   )
@@ -39,14 +57,14 @@ export default function NuevoPlato() {
               name="nombre"
               typeInput="text"
               placeHolder="Nombre nuevo Plato"
-              valueForm={formik.values.nombre}
+              valueForm={formik.values.name}
               changeValue={formik.handleChange}
               handBlur={formik.handleBlur}
             />
 
-            {formik.touched.nombre && formik.errors.nombre ? (
+            {formik.touched.name && formik.errors.name ? (
               <Form_errors 
-                errorName={formik.errors.nombre}
+                errorName={formik.errors.name}
               />
             ) : null}
 
@@ -55,13 +73,13 @@ export default function NuevoPlato() {
               name="precio"
               typeInput="number"
               placeHolder="Precio nuevo plato"
-              valueForm={formik.values.precio}
+              valueForm={formik.values.price}
               changeValue={formik.handleChange}
               handBlur={formik.handleBlur}
             />
-            {formik.touched.precio && formik.errors.precio ? (
+            {formik.touched.price && formik.errors.price ? (
               <Form_errors 
-                errorName={formik.errors.precio}
+                errorName={formik.errors.price}
               />
             ) : null}
             <div className="mb-4">
