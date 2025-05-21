@@ -14,6 +14,7 @@ export default function NuevoPlato() {
 
   // Redirección
   const navigate = useNavigate();
+
   
   // Validación y leer los datos del formulario
   const formik = useFormik(
@@ -27,19 +28,19 @@ export default function NuevoPlato() {
         exist: false
       },
       validationSchema: Yup.object({
-        nombre: Yup.string().min(3, 'Los platos deben de tener al menos 3 caracteres.').required('El nombre es obligatorio.'),
-        precio: Yup.number().min(1, 'Debes agregar un precio.').required('El precio es obligatorio.'),
+        name: Yup.string().min(3, 'Los platos deben de tener al menos 3 caracteres.').required('El nombre es obligatorio.'),
+        price: Yup.string().min(1, 'Debes agregar un precio.').required('El precio es obligatorio.'),
         category: Yup.string().required('La categoria es obligatoria'),
         description: Yup.string().min(1, 'La descripción debe de ser más larga.').required('La descripción es obligatoria'),
       }),
       onSubmit: async (datos: Producto) => {
         try{
           await addDoc(collection(firebase!.db, 'productos'), datos)
-          
           navigate('/')
 
         } catch (error) {
           console.log(error)
+          navigate("/error")
         }
       }
     }
@@ -54,7 +55,7 @@ export default function NuevoPlato() {
           <form onSubmit={formik.handleSubmit}>
             <Input_label 
               label="Nombre"
-              name="nombre"
+              name="name"
               typeInput="text"
               placeHolder="Nombre nuevo Plato"
               valueForm={formik.values.name}
@@ -70,7 +71,7 @@ export default function NuevoPlato() {
 
             <Input_label 
               label="Precio"
-              name="precio"
+              name="price"
               typeInput="number"
               placeHolder="Precio nuevo plato"
               valueForm={formik.values.price}
