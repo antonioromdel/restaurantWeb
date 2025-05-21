@@ -1,5 +1,6 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
-import { Firestore, getFirestore } from "firebase/firestore";
+import { Firestore, getFirestore,  } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -15,10 +16,12 @@ const firebaseConfig = {
 export class Firebase {
     public app: FirebaseApp
     public db: Firestore
+    public storage: FirebaseStorage
 
     constructor(){
         this.app = initializeApp(firebaseConfig)
         this.db = getFirestore(this.app)
+        this.storage = getStorage(this.app)
     }
 }
 

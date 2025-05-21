@@ -7,7 +7,7 @@ export default function ErrorScreen() {
   return (
     <>
       <h1 className="text-2xl text-red-600">Se ha producido un error</h1>
-      <p>Mensaje de error: {errorMessage}</p>
+      <p>Mensaje de error: {errorMessage != null ? errorMessage : "Sin mensaje de error disponible"}</p>
       <p>Contacte con soporte informando sobre este error.</p>
 
       <div className="mt-10">

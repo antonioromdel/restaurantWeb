@@ -22,6 +22,7 @@ function App() {
             <Route path='/menu' element={<Menu />}/>
             <Route path='/nuevo-plato' element={<NuevoPlato />}/>
             <Route path='/error/:errorMessage' element={<ErrorScreen />}/>
+            <Route path='/error' element={<ErrorScreen />}/>
           </Routes>
         </div>
       </div>

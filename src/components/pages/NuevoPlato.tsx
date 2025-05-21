@@ -7,6 +7,7 @@ import FirebaseContext from "../../firebase/context";
 import { collection, addDoc } from "firebase/firestore";
 import type { Producto } from "../../types/types";
 import { useNavigate } from "react-router-dom";
+import Input_upload from "./form_components/Input_upload";
 
 export default function NuevoPlato() {
 
@@ -30,11 +31,13 @@ export default function NuevoPlato() {
       validationSchema: Yup.object({
         name: Yup.string().min(3, 'Los platos deben de tener al menos 3 caracteres.').required('El nombre es obligatorio.'),
         price: Yup.string().min(1, 'Debes agregar un precio.').required('El precio es obligatorio.'),
+        image: Yup.string().required("La imagen es obligatoria"),
         category: Yup.string().required('La categoria es obligatoria'),
         description: Yup.string().min(1, 'La descripción debe de ser más larga.').required('La descripción es obligatoria'),
       }),
       onSubmit: async (datos: Producto) => {
         try{
+          
           await addDoc(collection(firebase!.db, 'productos'), datos)
           navigate('/')
 
@@ -111,10 +114,9 @@ export default function NuevoPlato() {
                 errorName={formik.errors.category}
               />
             ) : null}
-            <Input_label 
-              label="Imagen"
+            <Input_upload 
               name="image"
-              typeInput="file"
+              label="Imagen"
               valueForm={formik.values.image}
               changeValue={formik.handleChange}
               handBlur={formik.handleBlur}
